@@ -1,0 +1,3 @@
+[keys.normal]
+"w" = ":sh --block --confirm=false swww img --transition-type grow \"{}\""
+
