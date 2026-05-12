@@ -1,0 +1,37 @@
+{
+  "neodev": {
+    "library": {
+      "enabled": true,
+      "plugins": true
+    }
+  },
+  "neoconf": {
+    "plugins": {
+      "lua_ls": {
+        "enabled": true
+      }
+    }
+  }
+}
+{
+  "settings": {
+    "Lua": {
+      "runtime": {
+        "version": "LuaJIT"
+      },
+      "diagnostics": {
+        "globals": ["vim", "cx", "ya"]
+      },
+      "workspace": {
+        "checkThirdParty": false,
+        "library": [
+          "${3rd}/luv/library",
+          "${3rd}/busted/library"
+        ]
+      },
+      "telemetry": {
+        "enable": false
+      }
+    }
+  }
+}
