@@ -1,29 +1,29 @@
-HyperHDR 22.0.0beta1-1
-checkupdates-systemd-git r8.c8dd565-1
-informant 0.6.0-1
-lib32-gst-plugins-base-libs 1.28.2-1
-lib32-gstreamer 1.28.2-1
-lib32-gstreamer-debug 1.28.2-1
-libsearpc 2:3.3.0-5
-losslesscut-bin 3.68.0-1
-openrgb-plugin-effects-git 0.9.113.g56ed8f0-1
-openrgb-plugin-effects-git-debug 0.9.113.g56ed8f0-1
-proton-mail-bin 1.13.0-1
-proton-pass-bin 1.36.1-1
-proton-pass-bin-debug 1.36.1-1
-python-pywalfox 2.7.4-1
-scenefx0.4 0.4.1-2
-seafile 9.0.18-1
-seafile-client 9.0.18-1
-seafile-client-debug 9.0.18-1
-seafile-debug 9.0.18-1
-swayfx 0.5.3-4
-swaylock-effects 1.8.1-1
-swaylock-effects-debug 1.8.1-1
-termsonic-git 0.2.r4.g1dd63d4-1
-vencord 1.14.13-1
-vesktop 1.6.5-1
-wine32 11.8-1
-wine32-debug 11.8-1
-yay 12.5.7-1
-yay-debug 12.5.7-1
+HyperHDR
+checkupdates-systemd-git
+informant
+lib32-gst-plugins-base-libs
+lib32-gstreamer
+lib32-gstreamer-debug
+libsearpc
+losslesscut-bin
+openrgb-plugin-effects-git
+openrgb-plugin-effects-git-debug
+proton-mail-bin
+proton-pass-bin
+proton-pass-bin-debug
+python-pywalfox
+scenefx0.4
+seafile
+seafile-client
+seafile-client-debug
+seafile-debug
+swayfx
+swaylock-effects
+swaylock-effects-debug
+termsonic-git
+vencord
+vesktop
+wine32
+wine32-debug
+yay
+yay-debug
