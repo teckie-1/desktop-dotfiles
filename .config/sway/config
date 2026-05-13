@@ -129,7 +129,7 @@ bindsym Shift+Print exec sh -c 'grim -g "$(slurp)" - | satty -f -'
     # bemenu power menu
     bindsym $mod+p exec ~/.local/bin/power-menu.sh
     # launch lockscreen
-    bindsym $mod+l exec ~/.config/swaylock/hackerlock.sh 
+    bindsym $mod+l exec swaylock -f --config ~/.config/swaylock/config
     # proton-mail
     bindsym $mod+m exec proton-mail
     # reload colors only
