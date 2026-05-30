@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# setwall - set wallpaper with swww, generate wal colors from the same image,
+# then restart waybar and update GTK3 css links.
+#
+# Usage:
+#   setwall /path/to/wallpaper.jpg
+#   setwall --restore
+
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}"
+STATE_FILE="${STATE_DIR}/wallpaper"
+mkdir -p "$STATE_DIR"
+
+die(){ echo "setwall: $*" >&2; exit 1; }
+
+restore() {
+  [[ -f "$STATE_FILE" ]] || exit 0
+  local saved
+  saved="$(cat "$STATE_FILE")"
+  [[ -f "$saved" ]] || exit 0
+  exec "$0" "$saved"
+}
+
+if [[ "${1:-}" == "--restore" ]]; then
+  restore
+fi
+
+WALL="${1:-}"
+[[ -n "$WALL" ]] || die "Wallpaper not provided"
+[[ -f "$WALL" ]] || die "Wallpaper not found: $WALL"
+
+# Save wallpaper path
+echo "$WALL" > "$STATE_FILE"
+
+
+# Ensure awww daemon exists
+if ! pgrep -f "awww-daemon" >/dev/null 2>&1; then
+  setsid -f awww-daemon --no-cache >/dev/null 2>&1
+  sleep 0.3
+fi
+
+# Set wallpaper
+awww img "$WALL"
+
+# Generate wal scheme from THIS wallpaper (do NOT let wal set wallpaper)
+# This is the same command you successfully ran earlier.
+wal -i "$WALL" -n
+
+# Reload Neovim colors (if running)
+if command -v nvr >/dev/null 2>&1; then
+  nvr --remote-send '<Esc>:colorscheme neopywal-dark<CR>' >/dev/null 2>&1 &
+fi
+
+# Update Firefox theme from pywal colors (Pywalfox) — safe & non-blocking
+if pgrep -x firefox >/dev/null 2>&1 || pgrep -x firefox-bin >/dev/null 2>&1; then
+  (pywalfox update >/dev/null 2>&1 &)
+fi
+
+
+# --- Waybar: ensure the imported file exists and is GTK-compatible ---
+# Your waybar/style.css imports: ~/.cache/wal/colors-waybar.css
+# We fixed this by creating a wal template that outputs GTK CSS (@define-color).
+# If for some reason it isn't present, fall back to colors.css so waybar won't crash.
+if [[ ! -f "$HOME/.cache/wal/colors-waybar.css" && -f "$HOME/.cache/wal/colors.css" ]]; then
+  ln -sf "$HOME/.cache/wal/colors.css" "$HOME/.cache/wal/colors-waybar.css"
+fi
+
+# --- GTK3: point GTK at wal-generated css ---
+# GTK3 reads: ~/.config/gtk-3.0/gtk.css
+mkdir -p "$HOME/.config/gtk-3.0"
+if [[ -f "$HOME/.cache/wal/gtk-3.0.css" ]]; then
+  ln -sf "$HOME/.cache/wal/gtk-3.0.css" "$HOME/.config/gtk-3.0/gtk.css"
+fi
+
+# Also satisfy legacy path some configs/scripts import:
+mkdir -p "$HOME/.cache/wal/gtk-3.0"
+if [[ -f "$HOME/.cache/wal/gtk-3.0.css" ]]; then
+  ln -sf "$HOME/.cache/wal/gtk-3.0.css" "$HOME/.cache/wal/gtk-3.0/gtk.css"
+fi
+
+# Update MangoHud colors (pywal sync)
+if [[ -x "$HOME/.local/bin/mangohud-pywal" ]]; then
+  "$HOME/.local/bin/mangohud-pywal"
+fi
+
+# Reload Vesktop Quick CSS (Vencord watches the file via inotify)
+if pgrep -x vesktop > /dev/null 2>&1; then
+  touch "$HOME/.cache/wal/vesktop.css"
+fi
+
+# Reload waybar so new colors apply
+pkill -x waybar >/dev/null 2>&1 || true
+waybar >/dev/null 2>&1 &
+
+exit 0
+
+
