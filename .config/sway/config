@@ -23,7 +23,7 @@ exec_always --no-startup-id xsettingsd
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 
-exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland && systemctl --user restart xdg-desktop-portal-wlr
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
 exec xhost +si:localuser:root
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
@@ -104,10 +104,10 @@ exec_always wl-paste --type text --watch cliphist store
 
 # Idle configuration
  exec swayidle -w \
-  timeout 300 'swaylock -f --config ~/.config/swaylock/config' \
+  timeout 300 'gpgconf --kill gpg-agent; swaylock -f --config ~/.config/swaylock/config' \
   timeout 600 'swaymsg "output * dpms off"' \
   resume 'swaymsg "output * dpms on"' \
-  before-sleep 'swaylock -f --config ~/.config/swaylock/config'
+  before-sleep 'gpgconf --kill gpg-agent; swaylock -f --config ~/.config/swaylock/config'
 
 ### Key bindings 
 
@@ -126,7 +126,7 @@ bindsym Ctrl+Print exec grim -g "$(slurp)" - | wl-copy
     # Start your launcher
     bindsym $mod+d exec ~/.local/bin/bemenu-launcher
     # Launch browser
-    bindsym $mod+b exec firefox
+    bindsym $mod+b exec qutebrowser
     # Swaync notifications
     bindsym $mod+n exec swaync-client -t 
     # Restart waybar
@@ -134,7 +134,7 @@ bindsym Ctrl+Print exec grim -g "$(slurp)" - | wl-copy
     # bemenu power menu
     bindsym $mod+p exec ~/.local/bin/power-menu.sh
     # launch lockscreen
-    bindsym $mod+l exec swaylock -f --config ~/.config/swaylock/config
+    bindsym $mod+l exec sh -c 'gpgconf --kill gpg-agent; swaylock -f --config ~/.config/swaylock/config'
     # proton-mail
     bindsym $mod+m exec proton-mail
     # reload colors only
