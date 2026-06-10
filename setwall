@@ -89,6 +89,20 @@ if pgrep -x vesktop > /dev/null 2>&1; then
   touch "$HOME/.cache/wal/vesktop.css"
 fi
 
+# Reload qutebrowser config via IPC socket (avoids Python module cache issue)
+python3 - <<'PYEOF' 2>/dev/null || true
+import socket, json, glob, os
+for path in glob.glob(f'/run/user/{os.getuid()}/qutebrowser/ipc-*'):
+    try:
+        s = socket.socket(socket.AF_UNIX)
+        s.settimeout(2)
+        s.connect(path)
+        s.sendall(json.dumps({'args': [':config-source'], 'target_arg': None, 'protocol_version': 1}).encode() + b'\n')
+        s.close()
+    except Exception:
+        pass
+PYEOF
+
 # Reload waybar so new colors apply
 pkill -x waybar >/dev/null 2>&1 || true
 waybar >/dev/null 2>&1 &

@@ -23,7 +23,7 @@ exec_always --no-startup-id xsettingsd
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 
-exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland && systemctl --user restart xdg-desktop-portal-wlr
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland && systemctl --user restart xdg-desktop-portal-wlr && sleep 1 && systemctl --user restart xdg-desktop-portal
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
 exec xhost +si:localuser:root
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
