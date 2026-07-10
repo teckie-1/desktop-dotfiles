@@ -77,7 +77,7 @@ alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
 alias cat='bat'
-
+alias nmap='grc nmap'
 
 # Set-up FZF key bindings (CTRL R for fuzzy history finder)
 source <(fzf --zsh)
