@@ -94,9 +94,10 @@
     "keyColor": "green"
     },
     {
-    "type": "uptime",
+    "type": "command",
     "key": "│ ├󰅐",
-    "keyColor": "green"
+    "keyColor": "green",
+    "text": "install=$(date -d \"$(head -1 /var/log/pacman.log | grep -oP '\\[\\K[0-9-]+')\" +%s); now=$(date +%s); echo \"$(( (now - install) / 86400 )) days\""
     },
     {
     "type": "display",

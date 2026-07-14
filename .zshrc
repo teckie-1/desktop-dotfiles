@@ -78,6 +78,7 @@ alias lla='ls -la'
 alias lt='ls --tree'
 alias cat='bat'
 alias nmap='grc nmap'
+alias debt='~/Github/debt-tui/run.sh'
 
 # Set-up FZF key bindings (CTRL R for fuzzy history finder)
 source <(fzf --zsh)
