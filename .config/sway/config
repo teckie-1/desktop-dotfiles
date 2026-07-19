@@ -126,7 +126,7 @@ bindsym Ctrl+Print exec grim -g "$(slurp)" - | wl-copy
     # Start your launcher
     bindsym $mod+d exec ~/.local/bin/bemenu-launcher
     # Launch browser
-    bindsym $mod+b exec qutebrowser
+    bindsym $mod+b exec firefox
     # Swaync notifications
     bindsym $mod+n exec swaync-client -t 
     # Restart waybar
@@ -136,7 +136,7 @@ bindsym Ctrl+Print exec grim -g "$(slurp)" - | wl-copy
     # launch lockscreen
     bindsym $mod+l exec sh -c 'gpgconf --kill gpg-agent; swaylock -f --config ~/.config/swaylock/config'
     # proton-mail
-    bindsym $mod+m exec proton-mail
+    bindsym $mod+m exec thunderbird
     # reload colors only
     bindsym $mod+Shift+w exec wal -R
     # stop and go back to static wallpaper
