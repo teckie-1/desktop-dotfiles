@@ -305,5 +305,5 @@ bindsym $mod+r mode "resize"
 # }
 
 include /etc/sway/config.d/*
-exec bash -c 'until ping -c1 -W1 192.168.30.103 &>/dev/null; do sleep 1; done; hyperhdr'
+# hyperhdr now runs via the hyperhdr.service systemd --user unit (auto-starts on login, survives reboots)
 
