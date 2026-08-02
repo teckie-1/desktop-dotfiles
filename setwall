@@ -34,6 +34,10 @@ WALL="${1:-}"
 echo "$WALL" > "$STATE_FILE"
 
 
+# Pre-seed FZF_DEFAULT_OPTS so wal's generated colors.sh doesn't trip `set -u`
+# when it references $FZF_DEFAULT_OPTS unset (pywal's stock template does this).
+export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:-}"
+
 # Ensure awww daemon exists
 if ! pgrep -f "awww-daemon" >/dev/null 2>&1; then
   setsid -f awww-daemon --no-cache >/dev/null 2>&1
@@ -57,6 +61,36 @@ if pgrep -x firefox >/dev/null 2>&1 || pgrep -x firefox-bin >/dev/null 2>&1; the
   (pywalfox update >/dev/null 2>&1 &)
 fi
 
+# --- OpenRGB: sync case (motherboard) + mouse lighting to whichever wal color is most vivid ---
+# Picks the most saturated swatch out of color1-6 instead of a fixed index, since the
+# "most vibrant" index pywal ranks first doesn't reliably match the wallpaper's dominant look.
+# The picked color is then re-saturated/clamped in lightness, since the case fans' white
+# diffuser rings wash blended hues out toward pale/cream at the raw wal value.
+if command -v openrgb >/dev/null 2>&1 && [[ -f "$HOME/.cache/wal/colors.json" ]]; then
+  RGB_COLOR="$(python3 - <<'PYEOF' 2>/dev/null
+import json, colorsys, os
+d = json.load(open(os.path.expanduser("~/.cache/wal/colors.json")))
+candidates = {k: v for k, v in d["colors"].items() if k in ("color1","color2","color3","color4","color5","color6")}
+def sat(hexcode):
+    h = hexcode.lstrip("#")
+    r, g, b = (int(h[i:i+2], 16) / 255 for i in (0, 2, 4))
+    return colorsys.rgb_to_hls(r, g, b)[2]
+best_hex = max(candidates.items(), key=lambda kv: sat(kv[1]))[1]
+h = best_hex.lstrip("#")
+r, g, b = (int(h[i:i+2], 16) / 255 for i in (0, 2, 4))
+hue, light, _ = colorsys.rgb_to_hls(r, g, b)
+r2, g2, b2 = colorsys.hls_to_rgb(hue, min(max(light, 0.4), 0.5), 1.0)
+print("".join(f"{int(c*255):02X}" for c in (r2, g2, b2)))
+PYEOF
+)"
+  if [[ -n "$RGB_COLOR" ]]; then
+    (openrgb --client localhost:6742 \
+      --device "B650" --mode static --color "$RGB_COLOR" --brightness 65 \
+      --device "Basilisk" --mode static --color "$RGB_COLOR" --brightness 65 \
+      >/dev/null 2>&1 &)
+  fi
+fi
+
 
 # --- Waybar: ensure the imported file exists and is GTK-compatible ---
 # Your waybar/style.css imports: ~/.cache/wal/colors-waybar.css
@@ -77,6 +111,14 @@ fi
 mkdir -p "$HOME/.cache/wal/gtk-3.0"
 if [[ -f "$HOME/.cache/wal/gtk-3.0.css" ]]; then
   ln -sf "$HOME/.cache/wal/gtk-3.0.css" "$HOME/.cache/wal/gtk-3.0/gtk.css"
+fi
+
+# --- Thunderbird: symlink wal-generated userChrome.css ---
+# Picked up next time Thunderbird is launched (userChrome.css does not hot-reload).
+THUNDERBIRD_PROFILE="$HOME/.thunderbird/yfscuumj.default-release"
+mkdir -p "$THUNDERBIRD_PROFILE/chrome"
+if [[ -f "$HOME/.cache/wal/thunderbird-userChrome.css" ]]; then
+  ln -sf "$HOME/.cache/wal/thunderbird-userChrome.css" "$THUNDERBIRD_PROFILE/chrome/userChrome.css"
 fi
 
 # Update MangoHud colors (pywal sync)

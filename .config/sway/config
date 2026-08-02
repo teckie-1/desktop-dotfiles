@@ -28,6 +28,7 @@ exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CU
 exec xhost +si:localuser:root
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 exec waybar
+exec /usr/bin/openrgb --startminimized --server
 exec sh -c 'sleep 1; ~/.local/bin/setwall --restore'
 exec --no-startup-id setsid -f awww-daemon --no-cache
 
