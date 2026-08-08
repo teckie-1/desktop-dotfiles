@@ -66,7 +66,7 @@ set $menu bemenu
 ### Output configuration
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 # output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
-output * adaptive_sync on
+# output * adaptive_sync on
 
 # --- Monitor Layout ---
 output DP-3 mode 5120x1440@120Hz adaptive_sync on pos 0 0
@@ -105,10 +105,10 @@ exec_always wl-paste --type text --watch cliphist store
 
 # Idle configuration
  exec swayidle -w \
-  timeout 300 'gpgconf --kill gpg-agent; swaylock -f --config ~/.config/swaylock/config' \
+  timeout 300 'gpgconf --kill gpg-agent; ~/.local/bin/lock-lights' \
   timeout 600 'swaymsg "output * dpms off"' \
   resume 'swaymsg "output * dpms on"' \
-  before-sleep 'gpgconf --kill gpg-agent; swaylock -f --config ~/.config/swaylock/config'
+  before-sleep 'gpgconf --kill gpg-agent; ~/.local/bin/lock-lights'
 
 ### Key bindings 
 
@@ -135,7 +135,7 @@ bindsym Ctrl+Print exec grim -g "$(slurp)" - | wl-copy
     # bemenu power menu
     bindsym $mod+p exec ~/.local/bin/power-menu.sh
     # launch lockscreen
-    bindsym $mod+l exec sh -c 'gpgconf --kill gpg-agent; swaylock -f --config ~/.config/swaylock/config'
+    bindsym $mod+l exec sh -c 'gpgconf --kill gpg-agent; ~/.local/bin/lock-lights'
     # proton-mail
     bindsym $mod+m exec thunderbird
     # reload colors only
