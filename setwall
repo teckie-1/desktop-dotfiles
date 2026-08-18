@@ -51,10 +51,6 @@ awww img "$WALL"
 # This is the same command you successfully ran earlier.
 wal -i "$WALL" -n
 
-# Reload Neovim colors (if running)
-if command -v nvr >/dev/null 2>&1; then
-  nvr --remote-send '<Esc>:colorscheme neopywal-dark<CR>' >/dev/null 2>&1 &
-fi
 
 # Update Firefox theme from pywal colors (Pywalfox) — safe & non-blocking
 if pgrep -x firefox >/dev/null 2>&1 || pgrep -x firefox-bin >/dev/null 2>&1; then
