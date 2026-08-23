@@ -7,6 +7,7 @@ My personal dotfiles for my Arch Linux desktop. Running SwayFX on Wayland with N
 ## What's in here
 
 - **sway** — window manager config
+- **environment.d** — systemd user session env vars (GTK/Qt theming, portals)
 - **waybar** — status bar
 - **swaylock** — lock screen
 - **kitty** — terminal
@@ -19,6 +20,7 @@ My personal dotfiles for my Arch Linux desktop. Running SwayFX on Wayland with N
 - **yazi** — file manager
 - **zathura** — PDF viewer
 - **setwall** — wallpaper script (pywal + waybar/GTK/qutebrowser theming)
+- **qt5ct** / **qt6ct** — Qt app theming (Fusion + dark palette, for Qt apps to match GTK dark mode)
 
 Everything in here is public and safe to grab — no machine-specific setup or private stuff lives in this repo.
 
