@@ -41,6 +41,7 @@ for_window [app_id="qutebrowser"] opacity 0.9
 for_window [app_id="vesktop"] opacity 0.9
 for_window [app_id="firefox"] opacity 0.9
 for_window [app_id="kitty"] opacity 0.9
+for_window [app_id="obsidian"] opacity 0.9
 
 # Remove all window title bars 
 default_border pixel 2
