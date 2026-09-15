@@ -23,8 +23,8 @@ exec_always --no-startup-id xsettingsd
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 
-exec systemctl --user start sway-session.target && dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland && systemctl --user restart xdg-desktop-portal-wlr && sleep 1 && systemctl --user restart xdg-desktop-portal
-exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
+exec systemctl --user start sway-session.target && dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland GNOME_KEYRING_CONTROL GNOME_KEYRING_PID && systemctl --user restart xdg-desktop-portal-wlr && sleep 1 && systemctl --user restart xdg-desktop-portal
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE GNOME_KEYRING_CONTROL GNOME_KEYRING_PID
 exec xhost +si:localuser:root
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 exec waybar
@@ -39,9 +39,10 @@ set $mod Mod4
 # Transparency
 for_window [app_id="qutebrowser"] opacity 0.9
 for_window [app_id="vesktop"] opacity 0.9
-for_window [app_id="firefox"] opacity 0.9
+# for_window [app_id="firefox"] opacity 0.9
 for_window [app_id="kitty"] opacity 0.9
 for_window [app_id="obsidian"] opacity 0.9
+for_window [app_id="claude"] opacity 0.9
 
 # Remove all window title bars 
 default_border pixel 2
